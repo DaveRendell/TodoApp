@@ -1,4 +1,4 @@
-package com.dwrendell.todoapp;
+package com.dwrendell.todoapp.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,16 +9,23 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.dwrendell.todoapp.R;
+import com.dwrendell.todoapp.models.ToDoItem;
+import com.dwrendell.todoapp.models.ToDoItemBuilder;
+
+import java.time.LocalDate;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -26,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        View todoItemView = findViewById(R.id.todo_item);
+        ToDoItem todoModel = new ToDoItemBuilder()
+                .setId(0)
+                .setDate(new Date())
+                .setDescription("This is a hardcoded model")
+                .createToDoItem();
+        todoModel.updateView(todoItemView);
     }
 
     @Override
