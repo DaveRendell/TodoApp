@@ -54,6 +54,6 @@ public class ToDoItem {
 
     public void updateView(View todoItemView) {
         TextView text = todoItemView.findViewById(R.id.textView);
-        text.setText(description);
+        text.setText("- " + (description));
     }
 }
