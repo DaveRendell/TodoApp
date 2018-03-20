@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/todo_item"
     android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="wrap_content"
+    android:minHeight="48dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/todo_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -15,7 +16,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="monospace"
-        android:text="- Test To Do"
+        android:text=""
         android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="22sp"

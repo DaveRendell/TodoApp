@@ -53,7 +53,7 @@ public class ToDoItem {
     }
 
     public void updateView(View todoItemView) {
-        TextView text = todoItemView.findViewById(R.id.textView);
+        TextView text = todoItemView.findViewById(R.id.todo_description);
         text.setText("- " + (description));
     }
 }

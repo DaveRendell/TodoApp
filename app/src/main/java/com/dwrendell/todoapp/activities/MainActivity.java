@@ -4,17 +4,23 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dwrendell.todoapp.R;
+import com.dwrendell.todoapp.adapters.TodoItemAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
 import com.dwrendell.todoapp.models.ToDoItemBuilder;
+import com.woxthebox.draglistview.DragListView;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,13 +40,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        View todoItemView = findViewById(R.id.todo_item);
-        ToDoItem todoModel = new ToDoItemBuilder()
-                .setId(0)
-                .setDate(new Date())
-                .setDescription("This is a hardcoded model")
-                .createToDoItem();
-        todoModel.updateView(todoItemView);
+        List<ToDoItem> todos = new ArrayList<>(Arrays.asList(
+            new ToDoItemBuilder()
+                    .setId(0)
+                    .setDate(new Date())
+                    .setDescription("Todo no 1")
+                    .createToDoItem(),
+            new ToDoItemBuilder()
+                    .setId(1)
+                    .setDate(new Date())
+                    .setDescription("Todo no 2")
+                    .createToDoItem(),
+            new ToDoItemBuilder()
+                    .setId(2)
+                    .setDate(new Date())
+                    .setDescription("Todo no 3")
+                    .createToDoItem(),
+            new ToDoItemBuilder()
+                    .setId(3)
+                    .setDate(new Date())
+                    .setDescription("Todo no 4")
+                    .createToDoItem(),
+            new ToDoItemBuilder()
+                    .setId(4)
+                    .setDate(new Date())
+                    .setDescription("Todo no 5")
+                    .createToDoItem()
+        ));
+
+        DragListView dragListView = findViewById(R.id.drag_list_view);
+        dragListView.setLayoutManager(new LinearLayoutManager(this));
+        TodoItemAdapter adapter = new TodoItemAdapter(
+                new ArrayList<>(todos), R.layout.todo_item, R.id.todo_item, true);
+        dragListView.setAdapter(adapter, true);
+        dragListView.setCanDragHorizontally(false);
+
     }
 
     @Override
