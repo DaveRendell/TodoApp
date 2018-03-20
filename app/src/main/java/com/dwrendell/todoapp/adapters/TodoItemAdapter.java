@@ -8,18 +8,19 @@ import android.widget.TextView;
 
 import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.models.ToDoItem;
+import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragItemAdapter;
-
-import java.util.List;
 
 
 public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.TodoViewHolder> {
     private int layoutId;
     private int grabHandleId;
     private boolean dragOnLongPress;
+    private ToDoService toDoService;
 
-    public TodoItemAdapter(List<ToDoItem> todos, int layoutId, int grabHandleId, boolean dragOnLongPress) {
-        setItemList(todos);
+    public TodoItemAdapter(ToDoService toDoService, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+        setItemList(toDoService.getTodos());
+        this.toDoService = toDoService;
         this.layoutId = layoutId;
         this.grabHandleId = grabHandleId;
         this.dragOnLongPress = dragOnLongPress;
@@ -47,6 +48,12 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
         String text = mItemList.get(position).getDescription();
         holder.description.setText(text);
         holder.itemView.setTag(mItemList.get(position));
+    }
+
+    @Override
+    public void changeItemPosition(int fromPos, int toPos) {
+        super.changeItemPosition(fromPos, toPos);
+        toDoService.updateTodoPosition(fromPos, toPos);
     }
 
     class TodoViewHolder extends DragItemAdapter.ViewHolder {

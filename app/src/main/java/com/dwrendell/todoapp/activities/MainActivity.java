@@ -14,6 +14,8 @@ import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
 import com.dwrendell.todoapp.models.ToDoItemBuilder;
+import com.dwrendell.todoapp.services.HardcodedToDoService;
+import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragListView;
 
 import java.time.LocalDate;
@@ -40,38 +42,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        List<ToDoItem> todos = new ArrayList<>(Arrays.asList(
-            new ToDoItemBuilder()
-                    .setId(0)
-                    .setDate(new Date())
-                    .setDescription("Todo no 1")
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(1)
-                    .setDate(new Date())
-                    .setDescription("Todo no 2")
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(2)
-                    .setDate(new Date())
-                    .setDescription("Todo no 3")
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(3)
-                    .setDate(new Date())
-                    .setDescription("Todo no 4")
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(4)
-                    .setDate(new Date())
-                    .setDescription("Todo no 5")
-                    .createToDoItem()
-        ));
+        ToDoService toDoService = new HardcodedToDoService();
 
         DragListView dragListView = findViewById(R.id.drag_list_view);
         dragListView.setLayoutManager(new LinearLayoutManager(this));
         TodoItemAdapter adapter = new TodoItemAdapter(
-                new ArrayList<>(todos), R.layout.todo_item, R.id.todo_item, true);
+                toDoService, R.layout.todo_item, R.id.todo_item, true);
         dragListView.setAdapter(adapter, true);
         dragListView.setCanDragHorizontally(false);
 
