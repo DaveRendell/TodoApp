@@ -1,5 +1,8 @@
 package com.dwrendell.todoapp.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,9 +48,17 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        String text = mItemList.get(position).getDescription();
+        ToDoItem toDoItem = mItemList.get(position);
+        String text = toDoItem.getDescription();
         holder.description.setText(text);
-        holder.itemView.setTag(mItemList.get(position));
+        if (toDoItem.isDone()) {
+            holder.description.setTextColor(Color.GRAY);
+            holder.description.setPaintFlags(
+                    holder.description.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.description.setTextColor(Color.BLACK);
+        }
+        holder.itemView.setTag(toDoItem);
     }
 
     @Override

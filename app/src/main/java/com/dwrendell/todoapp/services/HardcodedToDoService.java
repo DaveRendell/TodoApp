@@ -22,6 +22,7 @@ public class HardcodedToDoService implements ToDoService {
                     .setId(1)
                     .setDate(new Date())
                     .setDescription("Todo no 2")
+                    .setDone(true)
                     .createToDoItem(),
             new ToDoItemBuilder()
                     .setId(2)
@@ -37,6 +38,7 @@ public class HardcodedToDoService implements ToDoService {
                     .setId(4)
                     .setDate(new Date())
                     .setDescription("Todo no 5")
+                    .setDone(true)
                     .createToDoItem()
     ));
 
