@@ -7,4 +7,6 @@ import java.util.List;
 public interface ToDoService {
     List<ToDoItem> getTodos();
     void updateTodoPosition(int from, int to);
+
+    void toggleDone(int id);
 }

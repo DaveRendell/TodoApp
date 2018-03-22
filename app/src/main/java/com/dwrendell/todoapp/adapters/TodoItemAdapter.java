@@ -1,6 +1,5 @@
 package com.dwrendell.todoapp.adapters;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -49,15 +48,7 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         ToDoItem toDoItem = mItemList.get(position);
-        String text = toDoItem.getDescription();
-        holder.description.setText(text);
-        if (toDoItem.isDone()) {
-            holder.description.setTextColor(Color.GRAY);
-            holder.description.setPaintFlags(
-                    holder.description.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {
-            holder.description.setTextColor(Color.BLACK);
-        }
+        holder.bindToModel(toDoItem);
         holder.itemView.setTag(toDoItem);
     }
 
@@ -69,11 +60,34 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
 
     class TodoViewHolder extends DragItemAdapter.ViewHolder {
         TextView description;
+        int id;
 
 
         TodoViewHolder(View itemView) {
             super(itemView, grabHandleId, dragOnLongPress);
             description = itemView.findViewById(R.id.todo_description);
+            id = -1;
+        }
+
+        public void bindToModel(ToDoItem toDoItem) {
+            description.setText(toDoItem.getDescription());
+            if (toDoItem.isDone()) {
+                description.setTextColor(Color.GRAY);
+                description.setPaintFlags(
+                        description.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                description.setTextColor(Color.BLACK);
+                description.setPaintFlags(
+                        description.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+            id = toDoItem.getId();
+        }
+
+        @Override
+        public void onItemClicked(View view) {
+            super.onItemClicked(view);
+            toDoService.toggleDone(id);
+            notifyDataSetChanged();
         }
     }
 }

@@ -54,4 +54,18 @@ public class HardcodedToDoService implements ToDoService {
         newTodos.add(to, item);
         todos = newTodos;
     }
+
+    @Override
+    public void toggleDone(int id) {
+        getTodo(id).setDone(!getTodo(id).isDone());
+    }
+
+    private ToDoItem getTodo(int id) {
+        for (ToDoItem todo : todos) {
+            if (todo.getId() == id) {
+                return todo;
+            }
+        }
+        throw new RuntimeException("No To Do found with id " + id);
+    }
 }
