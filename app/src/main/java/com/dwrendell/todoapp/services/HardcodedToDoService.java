@@ -1,5 +1,6 @@
 package com.dwrendell.todoapp.services;
 
+import com.dwrendell.todoapp.adapters.TodoItemAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
 import com.dwrendell.todoapp.models.ToDoItemBuilder;
 
@@ -42,6 +43,8 @@ public class HardcodedToDoService implements ToDoService {
                     .createToDoItem()
     ));
 
+    private int nextId = 5;
+
     @Override
     public List<ToDoItem> getTodos() {
         return new ArrayList<>(todos);
@@ -58,6 +61,16 @@ public class HardcodedToDoService implements ToDoService {
     @Override
     public void toggleDone(int id) {
         getTodo(id).setDone(!getTodo(id).isDone());
+    }
+
+    @Override
+    public void createTodo(String description) {
+        todos.add(new ToDoItemBuilder()
+                .setDescription(description)
+                .setId(nextId)
+                .setDate(new Date())
+                .createToDoItem());
+        nextId += 1;
     }
 
     private ToDoItem getTodo(int id) {

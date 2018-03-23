@@ -18,6 +18,8 @@ import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragListView;
 
 public class MainActivity extends AppCompatActivity {
+    ToDoService toDoService = new HardcodedToDoService();
+    TodoItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +33,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), EditTodoActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, EditTodoActivity.RequestCodes.CREATE);
             }
         });
 
-        ToDoService toDoService = new HardcodedToDoService();
-
         DragListView dragListView = findViewById(R.id.drag_list_view);
         dragListView.setLayoutManager(new LinearLayoutManager(this));
-        TodoItemAdapter adapter = new TodoItemAdapter(
+        adapter = new TodoItemAdapter(
                 toDoService, R.layout.todo_item, R.id.todo_item, true);
         dragListView.setAdapter(adapter, true);
         dragListView.setCanDragHorizontally(false);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EditTodoActivity.RequestCodes.CREATE) {
+            String description = data.getStringExtra(EditTodoActivity.DESCRIPTION_EXTRA);
+            toDoService.createTodo(description);
+            adapter.setItemList(toDoService.getTodos());
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

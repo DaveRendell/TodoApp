@@ -47,7 +47,7 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        ToDoItem toDoItem = mItemList.get(position);
+        ToDoItem toDoItem = toDoService.getTodos().get(position);
         holder.bindToModel(toDoItem);
         holder.itemView.setTag(toDoItem);
     }

@@ -9,4 +9,6 @@ public interface ToDoService {
     void updateTodoPosition(int from, int to);
 
     void toggleDone(int id);
+
+    void createTodo(String description);
 }
