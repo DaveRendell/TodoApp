@@ -73,6 +73,11 @@ public class HardcodedToDoService implements ToDoService {
         nextId += 1;
     }
 
+    @Override
+    public void editTodo(int id, String description) {
+        getTodo(id).setDescription(description);
+    }
+
     private ToDoItem getTodo(int id) {
         for (ToDoItem todo : todos) {
             if (todo.getId() == id) {

@@ -11,4 +11,6 @@ public interface ToDoService {
     void toggleDone(int id);
 
     void createTodo(String description);
+
+    void editTodo(int id, String description);
 }

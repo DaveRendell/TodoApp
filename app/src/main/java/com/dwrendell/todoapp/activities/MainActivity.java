@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
+import com.dwrendell.todoapp.models.ToDoItem;
 import com.dwrendell.todoapp.services.EditTodoActivity;
 import com.dwrendell.todoapp.services.HardcodedToDoService;
 import com.dwrendell.todoapp.services.ToDoService;
@@ -54,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
                     Toast.makeText(getBaseContext(), "Swiped right", Toast.LENGTH_SHORT).show();
+                    ToDoItem toDoItem = (ToDoItem) item.getTag();
+                    Intent intent = new Intent(getBaseContext(), EditTodoActivity.class);
+                    intent.putExtra("id", toDoItem.getId());
+                    intent.putExtra("default_description", toDoItem.getDescription());
+                    startActivityForResult(intent, EditTodoActivity.RequestCodes.EDIT);
                 }
             }
         });
@@ -74,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == EditTodoActivity.RequestCodes.CREATE) {
             String description = data.getStringExtra(EditTodoActivity.DESCRIPTION_EXTRA);
             toDoService.createTodo(description);
+            adapter.setItemList(toDoService.getTodos());
+            adapter.notifyDataSetChanged();
+        }
+        if (requestCode == EditTodoActivity.RequestCodes.EDIT) {
+            String description = data.getStringExtra(EditTodoActivity.DESCRIPTION_EXTRA);
+            int id = data.getIntExtra("id", -1);
+            toDoService.editTodo(id, description);
             adapter.setItemList(toDoService.getTodos());
             adapter.notifyDataSetChanged();
         }
