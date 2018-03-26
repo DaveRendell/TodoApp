@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
+                String test = swipedDirection.toString();
                 if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                     Toast.makeText(getBaseContext(), "Swiped left", Toast.LENGTH_SHORT).show();
                 }
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         });
         dragListView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TodoItemAdapter(
-                toDoService, R.layout.todo_item, R.id.todo_item, true);
+                toDoService, R.layout.todo_item, R.id.swipe_item, true);
 
 
         dragListView.setAdapter(adapter, true);
