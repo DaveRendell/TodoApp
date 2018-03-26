@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
@@ -16,6 +17,8 @@ import com.dwrendell.todoapp.services.EditTodoActivity;
 import com.dwrendell.todoapp.services.HardcodedToDoService;
 import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragListView;
+import com.woxthebox.draglistview.swipe.ListSwipeHelper;
+import com.woxthebox.draglistview.swipe.ListSwipeItem;
 
 public class MainActivity extends AppCompatActivity {
     ToDoService toDoService = new HardcodedToDoService();
@@ -38,11 +41,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
         DragListView dragListView = findViewById(R.id.drag_list_view);
+        dragListView.setSwipeListener(new ListSwipeHelper.OnSwipeListenerAdapter() {
+            @Override
+            public void onItemSwipeStarted(ListSwipeItem item) {
+                super.onItemSwipeStarted(item);
+            }
+
+            @Override
+            public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
+                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
+                    Toast.makeText(getBaseContext(), "Swiped left", Toast.LENGTH_SHORT).show();
+                }
+                if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
+                    Toast.makeText(getBaseContext(), "Swiped right", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         dragListView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TodoItemAdapter(
                 toDoService, R.layout.todo_item, R.id.todo_item, true);
+
+
         dragListView.setAdapter(adapter, true);
         dragListView.setCanDragHorizontally(false);
+
+
 
     }
 
