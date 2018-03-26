@@ -13,4 +13,6 @@ public interface ToDoService {
     void createTodo(String description);
 
     void editTodo(int id, String description);
+
+    void removeTodo(int id);
 }

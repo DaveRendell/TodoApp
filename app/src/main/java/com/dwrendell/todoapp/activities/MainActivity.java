@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DragListView dragListView = findViewById(R.id.drag_list_view);
+        final DragListView dragListView = findViewById(R.id.drag_list_view);
         dragListView.setSwipeListener(new ListSwipeHelper.OnSwipeListenerAdapter() {
             @Override
             public void onItemSwipeStarted(ListSwipeItem item) {
@@ -52,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
                 String test = swipedDirection.toString();
                 if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                    Toast.makeText(getBaseContext(), "Swiped left", Toast.LENGTH_SHORT).show();
+                    ToDoItem toDoItem = (ToDoItem) item.getTag();
+                    int position = adapter.getPositionForItem(toDoItem);
+                    adapter.removeItem(position);
+                    toDoService.removeTodo(toDoItem.getId());
                 }
                 if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                    Toast.makeText(getBaseContext(), "Swiped right", Toast.LENGTH_SHORT).show();
                     ToDoItem toDoItem = (ToDoItem) item.getTag();
                     Intent intent = new Intent(getBaseContext(), EditTodoActivity.class);
                     intent.putExtra("id", toDoItem.getId());

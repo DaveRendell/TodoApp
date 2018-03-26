@@ -78,6 +78,11 @@ public class HardcodedToDoService implements ToDoService {
         getTodo(id).setDescription(description);
     }
 
+    @Override
+    public void removeTodo(int id) {
+        todos.remove(getTodo(id));
+    }
+
     private ToDoItem getTodo(int id) {
         for (ToDoItem todo : todos) {
             if (todo.getId() == id) {
