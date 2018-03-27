@@ -15,19 +15,36 @@ import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
 import com.dwrendell.todoapp.services.EditTodoActivity;
+import com.dwrendell.todoapp.services.FileTodoService;
 import com.dwrendell.todoapp.services.HardcodedToDoService;
 import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
 
+import java.io.File;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
-    ToDoService toDoService = new HardcodedToDoService();
+    ToDoService toDoService;
     TodoItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        File directory = getFilesDir();
+        File file = new File(directory, "main.todo");
+        if (!file.exists()) {
+            try {
+                boolean created = file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        toDoService = new FileTodoService(file);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
-                String test = swipedDirection.toString();
                 if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
                     ToDoItem toDoItem = (ToDoItem) item.getTag();
                     int position = adapter.getPositionForItem(toDoItem);

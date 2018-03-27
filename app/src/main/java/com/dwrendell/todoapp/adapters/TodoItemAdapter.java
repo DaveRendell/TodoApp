@@ -58,6 +58,11 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
         toDoService.updateTodoPosition(fromPos, toPos);
     }
 
+    @Override
+    public int getPositionForItem(ToDoItem item) {
+        return toDoService.getPositionForId(item.getId());
+    }
+
     class TodoViewHolder extends DragItemAdapter.ViewHolder {
         TextView description;
         int id;

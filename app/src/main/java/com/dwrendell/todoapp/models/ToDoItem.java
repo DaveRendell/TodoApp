@@ -5,13 +5,18 @@ import android.widget.TextView;
 
 import com.dwrendell.todoapp.R;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ToDoItem {
+public class ToDoItem implements Serializable {
     private int id;
     private String description;
     private Date date;
     private boolean done;
+
+    public ToDoItem() {
+        this(0, null, null, false);
+    }
 
     public ToDoItem(int id, String description, Date date, boolean done) {
         this.id = id;

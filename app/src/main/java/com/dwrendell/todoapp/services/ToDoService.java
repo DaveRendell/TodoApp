@@ -15,4 +15,6 @@ public interface ToDoService {
     void editTodo(int id, String description);
 
     void removeTodo(int id);
+
+    int getPositionForId(int id);
 }

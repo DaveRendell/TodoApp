@@ -3,17 +3,21 @@ package com.dwrendell.todoapp.services;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
 import com.dwrendell.todoapp.models.ToDoItemBuilder;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Just for initial dev
- */
-public class HardcodedToDoService implements ToDoService {
-    private List<ToDoItem> todos = new ArrayList<>(Arrays.asList(
+import static java.sql.DriverManager.println;
+
+public class FileTodoService implements ToDoService {
+    private File file;
+    ArrayList<ToDoItem> todos= new ArrayList<>(Arrays.asList(
             new ToDoItemBuilder()
                     .setId(0)
                     .setDate(new Date())
@@ -41,46 +45,86 @@ public class HardcodedToDoService implements ToDoService {
                     .setDescription("Todo no 5")
                     .setDone(true)
                     .createToDoItem()
-    ));
+    ));;
+    private ObjectMapper mapper = new ObjectMapper();
 
-    private int nextId = 5;
+    public FileTodoService(File file) {
+        this.file = file;
+    }
 
     @Override
     public List<ToDoItem> getTodos() {
-        return new ArrayList<>(todos);
+        readFromFile();
+        return todos;
     }
 
     @Override
     public void updateTodoPosition(int from, int to) {
-        List<ToDoItem> newTodos = new ArrayList<>(todos);
+        readFromFile();
+        ArrayList<ToDoItem> newTodos = new ArrayList<>(todos);
         ToDoItem item = newTodos.remove(from);
         newTodos.add(to, item);
         todos = newTodos;
+        writeToFile();
     }
 
     @Override
     public void toggleDone(int id) {
+        readFromFile();
         getTodo(id).setDone(!getTodo(id).isDone());
+        writeToFile();
     }
 
     @Override
     public void createTodo(String description) {
+        readFromFile();
         todos.add(new ToDoItemBuilder()
                 .setDescription(description)
-                .setId(nextId)
+                .setId(getNextId())
                 .setDate(new Date())
                 .createToDoItem());
-        nextId += 1;
+        writeToFile();
     }
 
     @Override
     public void editTodo(int id, String description) {
+        readFromFile();
         getTodo(id).setDescription(description);
+        writeToFile();
     }
 
     @Override
     public void removeTodo(int id) {
+        readFromFile();
         todos.remove(getTodo(id));
+        writeToFile();
+    }
+
+    private int getNextId() {
+        int id = 0;
+        for (ToDoItem todo : todos) {
+            if (todo.getId() > id) {
+                id = todo.getId();
+            }
+        }
+        return id + 1;
+    }
+
+    private void writeToFile() {
+        //TODO delete file if exists?
+        try {
+            mapper.writeValue(file, todos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readFromFile() {
+        try {
+            todos = mapper.readValue(file, new TypeReference<List<ToDoItem>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private ToDoItem getTodo(int id) {
@@ -94,6 +138,11 @@ public class HardcodedToDoService implements ToDoService {
 
     @Override
     public int getPositionForId(int id) {
-        return 0;
+        for (int i = 0; i < todos.size(); i++ ) {
+            if (todos.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
