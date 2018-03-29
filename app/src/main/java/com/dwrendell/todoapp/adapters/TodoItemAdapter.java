@@ -2,6 +2,7 @@ package com.dwrendell.todoapp.adapters;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +76,8 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
         }
 
         public void bindToModel(ToDoItem toDoItem) {
-            description.setText(toDoItem.getDescription());
+            description.setText(String.format("• %s", toDoItem.getDescription()));
+            description.setTypeface(null, Typeface.BOLD);
             if (toDoItem.isDone()) {
                 description.setTextColor(Color.GRAY);
                 description.setPaintFlags(
