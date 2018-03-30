@@ -20,7 +20,8 @@
         android:padding="16dp"
         android:text="Edit"
         android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/item_right"

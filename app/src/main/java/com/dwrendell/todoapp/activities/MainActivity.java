@@ -1,6 +1,7 @@
 package com.dwrendell.todoapp.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dwrendell.todoapp.R;
@@ -80,6 +82,18 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("default_description", toDoItem.getDescription());
                     startActivityForResult(intent, EditTodoActivity.RequestCodes.EDIT);
                 }
+            }
+
+            @Override
+            public void onItemSwiping(ListSwipeItem item, float swipedDistanceX) {
+                TextView left = item.findViewById(R.id.item_left);
+                TextView right = item.findViewById(R.id.item_right);
+                int alpha = 255;
+                if (Math.abs(swipedDistanceX) < 600f) {
+                    alpha = Float.valueOf(255 * (Math.abs(swipedDistanceX) / 600)).intValue();
+                }
+                left.setBackgroundColor(Color.argb(alpha, 46, 125, 50));
+                right.setBackgroundColor(Color.argb(alpha, 183, 28, 28));
             }
         });
         dragListView.setLayoutManager(new LinearLayoutManager(this));
