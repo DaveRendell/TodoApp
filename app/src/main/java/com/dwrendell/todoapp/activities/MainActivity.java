@@ -110,18 +110,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == EditTodoActivity.RequestCodes.CREATE) {
-            String description = data.getStringExtra(EditTodoActivity.DESCRIPTION_EXTRA);
-            toDoService.createTodo(description);
-            adapter.setItemList(toDoService.getTodos());
-            adapter.notifyDataSetChanged();
-        }
-        if (requestCode == EditTodoActivity.RequestCodes.EDIT) {
-            String description = data.getStringExtra(EditTodoActivity.DESCRIPTION_EXTRA);
-            int id = data.getIntExtra("id", -1);
-            toDoService.editTodo(id, description);
-            adapter.setItemList(toDoService.getTodos());
-            adapter.notifyDataSetChanged();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == EditTodoActivity.RequestCodes.CREATE) {
+                String description = data.getStringExtra(EditTodoActivity.DESCRIPTION_EXTRA);
+                toDoService.createTodo(description);
+                adapter.setItemList(toDoService.getTodos());
+                adapter.notifyDataSetChanged();
+            }
+            if (requestCode == EditTodoActivity.RequestCodes.EDIT) {
+                String description = data.getStringExtra(EditTodoActivity.DESCRIPTION_EXTRA);
+                int id = data.getIntExtra("id", -1);
+                toDoService.editTodo(id, description);
+                adapter.setItemList(toDoService.getTodos());
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
