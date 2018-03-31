@@ -145,4 +145,10 @@ public class FileTodoService implements ToDoService {
         }
         return -1;
     }
+
+    @Override
+    public void deleteAll() {
+        todos = new ArrayList<>();
+        writeToFile();
+    }
 }

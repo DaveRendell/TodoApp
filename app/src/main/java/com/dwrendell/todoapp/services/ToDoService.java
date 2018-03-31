@@ -17,4 +17,6 @@ public interface ToDoService {
     void removeTodo(int id);
 
     int getPositionForId(int id);
+
+    void deleteAll();
 }

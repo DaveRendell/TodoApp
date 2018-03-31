@@ -27,6 +27,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     ToDoService toDoService;
     TodoItemAdapter adapter;
+    DragListView dragListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,10 +140,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete_all) {
+            toDoService.deleteAll();
+            adapter.setItemList(toDoService.getTodos());
+            adapter.notifyItemRangeRemoved(0, adapter.getItemCount());
             return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
