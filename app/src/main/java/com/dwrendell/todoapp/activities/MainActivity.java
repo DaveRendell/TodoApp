@@ -11,14 +11,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
-import com.dwrendell.todoapp.services.EditTodoActivity;
 import com.dwrendell.todoapp.services.FileTodoService;
-import com.dwrendell.todoapp.services.HardcodedToDoService;
 import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
