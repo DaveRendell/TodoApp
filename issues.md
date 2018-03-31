@@ -3,21 +3,24 @@ Project Issues
 
 Aesthetic issues
 ----------------
-
-    - Make green/red colouring on swipe views fade in as item is swiped
-    - Improve test size/font
     - Use appropriate icon for floating add button
     - Add app icon
-    - Add a dot to the start of the description
     - Custom view/animation for dragging
     - Animate strikethrough for marking as done
     
 Bugs
 ----
-    - Make app reject empty descriptions
-    - Handle pressing back on add/edit properly
     - General refactor tidying
-    - Long descriptions are truncated
+    
+Multiple Lists
+---------------
+    - Add button to top bar of Todo List activity
+    - Make button open (empty) side panel
+    - Add hardcoded list of todo lists, service, display on side panel
+    - Make clicking list open that list
+    - Add button to bring up new activity
+    - Make new activity create new lists
+    - Add 'delete list' option to non main lists    
     
 Future features
 ---------------
