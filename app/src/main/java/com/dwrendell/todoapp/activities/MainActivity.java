@@ -13,12 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
+import com.dwrendell.todoapp.models.TodoList;
 import com.dwrendell.todoapp.services.FileTodoService;
+import com.dwrendell.todoapp.services.HardcodedListService;
+import com.dwrendell.todoapp.services.ListService;
 import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
@@ -29,6 +35,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     ToDoService toDoService;
+    ListService listService;
     TodoItemAdapter adapter;
     DragListView dragListView;
     private DrawerLayout drawerLayout;
@@ -48,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         toDoService = new FileTodoService(file);
+        listService = new HardcodedListService();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -113,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
         dragListView.setAdapter(adapter, true);
         dragListView.setCanDragHorizontally(false);
 
-
+        ListView menuItems = findViewById(R.id.lst_menu_items);
+        menuItems.setAdapter(new ArrayAdapter<>(
+                this, R.layout.menu_list_item, listService.getLists()));
 
     }
 
