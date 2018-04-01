@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -44,17 +45,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        File directory = getFilesDir();
-        File file = new File(directory, "main.todo");
-        if (!file.exists()) {
-            try {
-                boolean created = file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        toDoService = new FileTodoService(file);
+        switchList("main");
         listService = new HardcodedListService();
 
         setContentView(R.layout.activity_main);
@@ -125,6 +116,18 @@ public class MainActivity extends AppCompatActivity {
         menuItems.setAdapter(new ArrayAdapter<>(
                 this, R.layout.menu_list_item, listService.getLists()));
 
+        menuItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView textView = (TextView) view;
+                switchList(textView.getText().toString().toLowerCase());
+                adapter = new TodoItemAdapter(
+                        toDoService, R.layout.todo_item, R.id.swipe_item, true);
+                dragListView.setAdapter(adapter, true);
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+
     }
 
     @Override
@@ -169,5 +172,19 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void switchList(String listName) {
+        File directory = getFilesDir();
+        File file = new File(directory, String.format("%s.todo", listName));
+        if (!file.exists()) {
+            try {
+                boolean created = file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        toDoService = new FileTodoService(file);
     }
 }

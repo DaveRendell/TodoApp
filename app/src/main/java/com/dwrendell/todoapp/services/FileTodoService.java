@@ -17,39 +17,12 @@ import static java.sql.DriverManager.println;
 
 public class FileTodoService implements ToDoService {
     private File file;
-    ArrayList<ToDoItem> todos= new ArrayList<>(Arrays.asList(
-            new ToDoItemBuilder()
-                    .setId(0)
-                    .setDate(new Date())
-                    .setDescription("Todo no 1")
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(1)
-                    .setDate(new Date())
-                    .setDescription("Todo no 2")
-                    .setDone(true)
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(2)
-                    .setDate(new Date())
-                    .setDescription("Todo no 3")
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(3)
-                    .setDate(new Date())
-                    .setDescription("Todo no 4")
-                    .createToDoItem(),
-            new ToDoItemBuilder()
-                    .setId(4)
-                    .setDate(new Date())
-                    .setDescription("Todo no 5")
-                    .setDone(true)
-                    .createToDoItem()
-    ));;
+    private ArrayList<ToDoItem> todos = new ArrayList<>();
     private ObjectMapper mapper = new ObjectMapper();
 
     public FileTodoService(File file) {
         this.file = file;
+        readFromFile();
     }
 
     @Override

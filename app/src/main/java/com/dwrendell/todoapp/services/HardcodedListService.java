@@ -11,6 +11,7 @@ public class HardcodedListService implements ListService {
     public List<TodoList> getLists() {
         return new ArrayList<>(Arrays.asList(
                 new TodoList("Main"),
+                new TodoList("TodoApp Development"),
                 new TodoList("Books to Read"),
                 new TodoList("Movies to Watch"),
                 new TodoList("Shopping List")
