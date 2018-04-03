@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView textView = (TextView) view;
-                switchList(textView.getText().toString().toLowerCase());
+                switchList(textView.getText().toString());
                 adapter = new TodoItemAdapter(
                         toDoService, R.layout.todo_item, R.id.swipe_item, true);
                 dragListView.setAdapter(adapter, true);
@@ -176,12 +176,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchList(String listName) {
         File directory = getFilesDir();
-        File file = new File(directory, String.format("%s.todo", listName));
+        File file = new File(directory, String.format("%s.todo", listName.toLowerCase()));
         if (!file.exists()) {
             try {
                 boolean created = file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            if (listName.equals("Main")) {
+                actionbar.setTitle("TodoApp");
+            } else {
+                actionbar.setTitle(listName);
             }
         }
 
