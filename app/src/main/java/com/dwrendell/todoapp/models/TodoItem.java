@@ -8,17 +8,17 @@ import com.dwrendell.todoapp.R;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ToDoItem implements Serializable {
+public class TodoItem implements Serializable {
     private int id;
     private String description;
     private Date date;
     private boolean done;
 
-    public ToDoItem() {
+    public TodoItem() {
         this(0, null, null, false);
     }
 
-    public ToDoItem(int id, String description, Date date, boolean done) {
+    public TodoItem(int id, String description, Date date, boolean done) {
         this.id = id;
         this.description = description;
         this.date = date;

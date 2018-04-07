@@ -1,11 +1,11 @@
 package com.dwrendell.todoapp.services;
 
-import com.dwrendell.todoapp.models.ToDoItem;
+import com.dwrendell.todoapp.models.TodoItem;
 
 import java.util.List;
 
 public interface ToDoService {
-    List<ToDoItem> getTodos();
+    List<TodoItem> getTodos();
     void updateTodoPosition(int from, int to);
 
     void toggleDone(int id);

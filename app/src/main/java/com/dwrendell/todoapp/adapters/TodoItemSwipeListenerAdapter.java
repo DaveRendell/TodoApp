@@ -1,6 +1,5 @@
 package com.dwrendell.todoapp.adapters;
 
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.widget.TextView;
@@ -8,7 +7,7 @@ import android.widget.TextView;
 import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.activities.EditTodoActivity;
 import com.dwrendell.todoapp.activities.MainActivity;
-import com.dwrendell.todoapp.models.ToDoItem;
+import com.dwrendell.todoapp.models.TodoItem;
 import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
@@ -34,16 +33,16 @@ public class TodoItemSwipeListenerAdapter implements ListSwipeHelper.OnSwipeList
     @Override
     public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
         if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-            ToDoItem toDoItem = (ToDoItem) item.getTag();
-            int position = adapter.getPositionForItem(toDoItem);
+            TodoItem todoItem = (TodoItem) item.getTag();
+            int position = adapter.getPositionForItem(todoItem);
             adapter.removeItem(position);
-            toDoService.removeTodo(toDoItem.getId());
+            toDoService.removeTodo(todoItem.getId());
         }
         if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-            ToDoItem toDoItem = (ToDoItem) item.getTag();
+            TodoItem todoItem = (TodoItem) item.getTag();
             Intent intent = new Intent(mainActivity.getBaseContext(), EditTodoActivity.class);
-            intent.putExtra("id", toDoItem.getId());
-            intent.putExtra("default_description", toDoItem.getDescription());
+            intent.putExtra("id", todoItem.getId());
+            intent.putExtra("default_description", todoItem.getDescription());
             mainActivity.startActivityForResult(intent, EditTodoActivity.RequestCodes.EDIT);
         }
     }

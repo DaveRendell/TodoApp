@@ -1,23 +1,19 @@
 package com.dwrendell.todoapp.services;
 
-import com.dwrendell.todoapp.adapters.TodoItemAdapter;
-import com.dwrendell.todoapp.models.ToDoItem;
-import com.dwrendell.todoapp.models.ToDoItemBuilder;
+import com.dwrendell.todoapp.models.TodoItem;
+import com.dwrendell.todoapp.models.TodoItemBuilder;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static java.sql.DriverManager.println;
-
 public class FileTodoService implements ToDoService {
     private File file;
-    private ArrayList<ToDoItem> todos = new ArrayList<>();
+    private ArrayList<TodoItem> todos = new ArrayList<>();
     private ObjectMapper mapper = new ObjectMapper();
 
     public FileTodoService(File file) {
@@ -26,7 +22,7 @@ public class FileTodoService implements ToDoService {
     }
 
     @Override
-    public List<ToDoItem> getTodos() {
+    public List<TodoItem> getTodos() {
         readFromFile();
         return todos;
     }
@@ -34,8 +30,8 @@ public class FileTodoService implements ToDoService {
     @Override
     public void updateTodoPosition(int from, int to) {
         readFromFile();
-        ArrayList<ToDoItem> newTodos = new ArrayList<>(todos);
-        ToDoItem item = newTodos.remove(from);
+        ArrayList<TodoItem> newTodos = new ArrayList<>(todos);
+        TodoItem item = newTodos.remove(from);
         newTodos.add(to, item);
         todos = newTodos;
         writeToFile();
@@ -51,7 +47,7 @@ public class FileTodoService implements ToDoService {
     @Override
     public void createTodo(String description) {
         readFromFile();
-        todos.add(new ToDoItemBuilder()
+        todos.add(new TodoItemBuilder()
                 .setDescription(description)
                 .setId(getNextId())
                 .setDate(new Date())
@@ -75,7 +71,7 @@ public class FileTodoService implements ToDoService {
 
     private int getNextId() {
         int id = 0;
-        for (ToDoItem todo : todos) {
+        for (TodoItem todo : todos) {
             if (todo.getId() > id) {
                 id = todo.getId();
             }
@@ -94,14 +90,14 @@ public class FileTodoService implements ToDoService {
 
     private void readFromFile() {
         try {
-            todos = mapper.readValue(file, new TypeReference<List<ToDoItem>>(){});
+            todos = mapper.readValue(file, new TypeReference<List<TodoItem>>(){});
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private ToDoItem getTodo(int id) {
-        for (ToDoItem todo : todos) {
+    private TodoItem getTodo(int id) {
+        for (TodoItem todo : todos) {
             if (todo.getId() == id) {
                 return todo;
             }

@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dwrendell.todoapp.R;
-import com.dwrendell.todoapp.models.ToDoItem;
+import com.dwrendell.todoapp.models.TodoItem;
 import com.dwrendell.todoapp.services.ToDoService;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 
-public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.TodoViewHolder> {
+public class TodoItemAdapter extends DragItemAdapter<TodoItem, TodoItemAdapter.TodoViewHolder> {
     private int layoutId;
     private int grabHandleId;
     private boolean dragOnLongPress;
@@ -31,7 +31,7 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
 
     @Override
     public long getUniqueItemId(int position) {
-        ToDoItem todo = getItemList().get(position);
+        TodoItem todo = getItemList().get(position);
         return todo.getId();
     }
 
@@ -48,9 +48,9 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        ToDoItem toDoItem = toDoService.getTodos().get(position);
-        holder.bindToModel(toDoItem);
-        holder.itemView.setTag(toDoItem);
+        TodoItem todoItem = toDoService.getTodos().get(position);
+        holder.bindToModel(todoItem);
+        holder.itemView.setTag(todoItem);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
     }
 
     @Override
-    public int getPositionForItem(ToDoItem item) {
+    public int getPositionForItem(TodoItem item) {
         return toDoService.getPositionForId(item.getId());
     }
 
@@ -75,10 +75,10 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
             id = -1;
         }
 
-        public void bindToModel(ToDoItem toDoItem) {
-            description.setText(String.format("• %s", toDoItem.getDescription()));
+        public void bindToModel(TodoItem todoItem) {
+            description.setText(String.format("• %s", todoItem.getDescription()));
             description.setTypeface(null, Typeface.BOLD);
-            if (toDoItem.isDone()) {
+            if (todoItem.isDone()) {
                 description.setTextColor(Color.GRAY);
                 description.setPaintFlags(
                         description.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -87,7 +87,7 @@ public class TodoItemAdapter extends DragItemAdapter<ToDoItem, TodoItemAdapter.T
                 description.setPaintFlags(
                         description.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             }
-            id = toDoItem.getId();
+            id = todoItem.getId();
         }
 
         @Override

@@ -2,33 +2,33 @@ package com.dwrendell.todoapp.models;
 
 import java.util.Date;
 
-public class ToDoItemBuilder {
+public class TodoItemBuilder {
     private int id;
     private String description;
     private Date date;
     private boolean done = false;
 
-    public ToDoItemBuilder setId(int id) {
+    public TodoItemBuilder setId(int id) {
         this.id = id;
         return this;
     }
 
-    public ToDoItemBuilder setDescription(String description) {
+    public TodoItemBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
 
-    public ToDoItemBuilder setDate(Date date) {
+    public TodoItemBuilder setDate(Date date) {
         this.date = date;
         return this;
     }
 
-    public ToDoItemBuilder setDone(boolean done) {
+    public TodoItemBuilder setDone(boolean done) {
         this.done = done;
         return this;
     }
 
-    public ToDoItem createToDoItem() {
-        return new ToDoItem(id, description, date, done);
+    public TodoItem createToDoItem() {
+        return new TodoItem(id, description, date, done);
     }
 }
