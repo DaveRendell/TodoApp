@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.dwrendell.todoapp.R;
 import com.dwrendell.todoapp.adapters.TodoItemAdapter;
+import com.dwrendell.todoapp.adapters.TodoItemSwipeListenerAdapter;
 import com.dwrendell.todoapp.models.ToDoItem;
 import com.dwrendell.todoapp.models.TodoList;
 import com.dwrendell.todoapp.services.FileTodoService;
@@ -35,83 +36,46 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-    ToDoService toDoService;
-    ListService listService;
-    TodoItemAdapter adapter;
-    DragListView dragListView;
+    private ToDoService toDoService;
+    private ListService listService;
+    private TodoItemAdapter adapter;
+    private DragListView dragListView;
     private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         switchList("main");
-        listService = new HardcodedListService();
 
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        if (actionbar != null) {
-            actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        }
+        adapter = new TodoItemAdapter(
+                toDoService, R.layout.todo_item, R.id.swipe_item, true);
+        ListSwipeHelper.OnSwipeListener swipeListener =
+                new TodoItemSwipeListenerAdapter(adapter, toDoService,this);
+
+        listService = new HardcodedListService();
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), EditTodoActivity.class);
-                startActivityForResult(intent, EditTodoActivity.RequestCodes.CREATE);
-            }
-        });
+        setupActionBar();
+        setupFloatingAddButton();
+        setupDragListView(swipeListener);
+        setupMenuItems();
 
-        final DragListView dragListView = findViewById(R.id.drag_list_view);
-        dragListView.setSwipeListener(new ListSwipeHelper.OnSwipeListenerAdapter() {
-            @Override
-            public void onItemSwipeStarted(ListSwipeItem item) {
-                super.onItemSwipeStarted(item);
-            }
+    }
 
-            @Override
-            public void onItemSwipeEnded(ListSwipeItem item, ListSwipeItem.SwipeDirection swipedDirection) {
-                if (swipedDirection == ListSwipeItem.SwipeDirection.LEFT) {
-                    ToDoItem toDoItem = (ToDoItem) item.getTag();
-                    int position = adapter.getPositionForItem(toDoItem);
-                    adapter.removeItem(position);
-                    toDoService.removeTodo(toDoItem.getId());
-                }
-                if (swipedDirection == ListSwipeItem.SwipeDirection.RIGHT) {
-                    ToDoItem toDoItem = (ToDoItem) item.getTag();
-                    Intent intent = new Intent(getBaseContext(), EditTodoActivity.class);
-                    intent.putExtra("id", toDoItem.getId());
-                    intent.putExtra("default_description", toDoItem.getDescription());
-                    startActivityForResult(intent, EditTodoActivity.RequestCodes.EDIT);
-                }
-            }
-
-            @Override
-            public void onItemSwiping(ListSwipeItem item, float swipedDistanceX) {
-                TextView left = item.findViewById(R.id.item_left);
-                TextView right = item.findViewById(R.id.item_right);
-                int alpha = 255;
-                if (Math.abs(swipedDistanceX) < 600f) {
-                    alpha = Float.valueOf(255 * (Math.abs(swipedDistanceX) / 600)).intValue();
-                }
-                left.setBackgroundColor(Color.argb(alpha, 46, 125, 50));
-                right.setBackgroundColor(Color.argb(alpha, 183, 28, 28));
-            }
-        });
+    private void setupDragListView(ListSwipeHelper.OnSwipeListener swipeListener) {
+        dragListView = findViewById(R.id.drag_list_view);
+        dragListView.setSwipeListener(swipeListener);
         dragListView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TodoItemAdapter(
-                toDoService, R.layout.todo_item, R.id.swipe_item, true);
 
 
         dragListView.setAdapter(adapter, true);
         dragListView.setCanDragHorizontally(false);
+    }
 
+    private void setupMenuItems() {
         ListView menuItems = findViewById(R.id.lst_menu_items);
         menuItems.setAdapter(new ArrayAdapter<>(
                 this, R.layout.menu_list_item, listService.getLists()));
@@ -127,7 +91,27 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
+    }
 
+    private void setupActionBar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        }
+    }
+
+    private void setupFloatingAddButton() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), EditTodoActivity.class);
+                startActivityForResult(intent, EditTodoActivity.RequestCodes.CREATE);
+            }
+        });
     }
 
     @Override
